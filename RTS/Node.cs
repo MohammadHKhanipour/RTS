@@ -11,7 +11,7 @@ namespace RTS
         public int Counter { get; set; }
         public List<Query> Queries { get; set; }
         public Node Parent { get; set; }
-        public Node RightNode { get; set; }
-        public Node LeftNode { get; set; }
+        public Node RightChild { get; set; }
+        public Node LeftChild { get; set; }
     }
 }
