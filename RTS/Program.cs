@@ -25,6 +25,26 @@ foreach (var item in queries)
 
 var treeRoot = GenerateTree(values.Distinct().OrderBy(x => x).ToList());
 
+/*
+                                               ┌──────┐
+                                               │ root │
+                                ┌──────────────┤ node ├──────────────┐
+                                │              └──────┘              │
+                                │                                    │
+                                │                                    │
+                          ┌─────▼──────┐                      ┌──────▼──────┐
+                          │ left child │                      │ right child │
+                      ┌───┤  /parent   ├───┐              ┌───┤   /parent   ├───┐
+                      │   └────────────┘   │              │   └─────────────┘   │
+                      │                    │              │                     │
+                      │                    │              │                     │
+                ┌─────▼──────┐      ┌──────▼──────┐ ┌─────▼──────┐       ┌──────▼──────┐
+                │ left child │      │ right child │ │ left child │       │ right child │
+                │  /parent   │      │   /parent   │ │  /parent   │       │   /parent   │
+                └────────────┘      └─────────────┘ └────────────┘       └─────────────┘
+
+                                                  ...
+ */
 Node GenerateTree(List<float> input)
 {
     int inputCount = input.Count;
