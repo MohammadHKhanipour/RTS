@@ -2,12 +2,12 @@
 {
     public class MinHeap
     {
-        private readonly int[] _elements;
+        private readonly Sigma[] _elements;
         private int _size;
 
         public MinHeap(int size)
         {
-            _elements = new int[size];
+            _elements = new Sigma[size];
         }
 
         private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;
@@ -18,9 +18,9 @@
         private bool HasRightChild(int elementIndex) => GetRightChildIndex(elementIndex) < _size;
         private bool IsRoot(int elementIndex) => elementIndex == 0;
 
-        private int GetLeftChild(int elementIndex) => _elements[GetLeftChildIndex(elementIndex)];
-        private int GetRightChild(int elementIndex) => _elements[GetRightChildIndex(elementIndex)];
-        private int GetParent(int elementIndex) => _elements[GetParentIndex(elementIndex)];
+        private Sigma GetLeftChild(int elementIndex) => _elements[GetLeftChildIndex(elementIndex)];
+        private Sigma GetRightChild(int elementIndex) => _elements[GetRightChildIndex(elementIndex)];
+        private Sigma GetParent(int elementIndex) => _elements[GetParentIndex(elementIndex)];
 
         private void Swap(int firstIndex, int secondIndex)
         {
@@ -34,7 +34,7 @@
             return _size == 0;
         }
 
-        public int Peek()
+        public Sigma Peek()
         {
             if (_size == 0)
                 throw new IndexOutOfRangeException();
@@ -42,7 +42,7 @@
             return _elements[0];
         }
 
-        public int Pop()
+        public Sigma Pop()
         {
             if (_size == 0)
                 throw new IndexOutOfRangeException();
@@ -56,7 +56,7 @@
             return result;
         }
 
-        public void Add(int element)
+        public void Add(Sigma element)
         {
             if (_size == _elements.Length)
                 throw new IndexOutOfRangeException();
@@ -73,12 +73,12 @@
             while (HasLeftChild(index))
             {
                 var smallerIndex = GetLeftChildIndex(index);
-                if (HasRightChild(index) && GetRightChild(index) < GetLeftChild(index))
+                if (HasRightChild(index) && GetRightChild(index).Value < GetLeftChild(index).Value)
                 {
                     smallerIndex = GetRightChildIndex(index);
                 }
 
-                if (_elements[smallerIndex] >= _elements[index])
+                if (_elements[smallerIndex].Value >= _elements[index].Value)
                 {
                     break;
                 }
@@ -91,7 +91,7 @@
         private void ReCalculateUp()
         {
             var index = _size - 1;
-            while (!IsRoot(index) && _elements[index] < GetParent(index))
+            while (!IsRoot(index) && _elements[index].Value < GetParent(index).Value)
             {
                 var parentIndex = GetParentIndex(index);
                 Swap(parentIndex, index);

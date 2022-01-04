@@ -7,7 +7,6 @@
             Counter = counter;
             Start = start;
             End = end;
-            Queries = queries;
             Parent = parent;
             RightChild = rightChild;
             LeftChild = leftChild;
@@ -15,9 +14,22 @@
         public int Counter { get; set; }
         public float Start { get; set; }
         public float End { get; set; }
-        public List<Query>? Queries { get; set; }
+        public List<Sigma>? Sigmas { get; set; } = new List<Sigma>();
+        public MinHeap MinHeap { get; set; }
         public Node? Parent { get; set; }
         public Node? RightChild { get; set; }
         public Node? LeftChild { get; set; }
+
+        public void AddSigma(Query query, int landa)
+        {
+            Sigmas.Add(new Sigma(query, landa + Counter));
+        }
+
+        public void MakeHeap()
+        {
+            MinHeap = new MinHeap(Sigmas.Count);
+            foreach (var sigma in Sigmas)
+                MinHeap.Add(sigma);
+        }
     }
 }

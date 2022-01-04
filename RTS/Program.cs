@@ -63,8 +63,8 @@ Node GenerateTree(List<float> input)
         Node leftNode = nodesQueue.Dequeue();
         Node rightNode = nodesQueue.Dequeue();
         Node parentNode = new Node(0, leftNode.Start, rightNode.End, null, null, rightNode, leftNode);
-        leftNode.Parent=parentNode;
-        rightNode.Parent=parentNode;
+        leftNode.Parent = parentNode;
+        rightNode.Parent = parentNode;
         nodesQueue.Enqueue(parentNode);
     }
 
@@ -92,4 +92,17 @@ List<Node> FindNodes(Query query, Node root)
     }
 
     return nodes;
+}
+
+void AddSigmas(Node root, List<Query> queries)
+{
+    foreach (var query in queries)
+    {
+        List<Node> nodes = FindNodes(query, root);
+        int landa = query.Threshold / (2 * nodes.Count);
+        foreach (var node in nodes)
+        {
+            node.AddSigma(query, landa);
+        }
+    }
 }
