@@ -52,3 +52,24 @@ Node GenerateTree(List<float> input)
 
     return root;
 }
+
+List<Node> FindNodes(Query query, Node root)
+{
+    List<Node> nodes = new List<Node>();
+    Stack<Node> stack = new Stack<Node>();
+
+    stack.Push(root);
+
+    while (stack.Count > 0)
+    {
+        Node node = stack.Pop();
+        if (node.Start >= query.Start && node.End <= query.End)
+            nodes.Add(node);
+        else if (node.Start > query.End || node.End < query.Start)
+            continue;
+        stack.Push(node.RightChild);
+        stack.Push(node.LeftChild);
+    }
+
+    return nodes;
+}
