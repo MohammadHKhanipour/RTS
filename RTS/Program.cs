@@ -16,24 +16,39 @@ for (int i = 1; i <= queryCount; i++)
     queries.Add(new Query(start, end, threshold));
 }
 
-queries.OrderBy(q => q.Start);
+List<float> values = new List<float>();
+foreach (var item in queries)
+{
+    values.Add(item.Start);
+    values.Add(item.End);
+}
 
-/*
- * I think i'm supposed to consider start and end values for Nodes and for the first level start=end and for higher ones start!=end
- * Then i can get all the start and end values of all queries distinct and sort them and then make the first level based on them then the -
- * second level based on the first level and so on until we get to a root which covers all the values.
- * I should keep track of each level so I can add two of the nodes as their parent's left and right child.
- *             ┌────────┐
-               │        │
-               │ parent │
-           ┌──►│  node  │◄──┐
-           │   │        │   │
-           │   └────────┘   │
-           │                │
-        ┌──┴────┐       ┌───┴───┐
-        │       │       │       │
-        │ child │       │ child │
-        │ node  │       │ node  │
-        │       │       │       │
-        └───────┘       └───────┘
- */
+var treeRoot = GenerateTree(values.Distinct().OrderBy(x => x).ToList());
+
+Node GenerateTree(List<float> input)
+{
+    int inputCount = input.Count;
+    List<Node> nodes = new List<Node>();
+    int nodeCount = (2 * inputCount) - 1;
+
+    Queue<Node> nodesQueue = new Queue<Node>();
+    for (int i = 0; i < inputCount - 1; i++)
+    {
+        nodesQueue.Enqueue(new Node(0, input[i], input[i + 1], null, null, null, null));
+    }
+    nodesQueue.Enqueue(new Node(0, input[inputCount - 1], -1, null, null, null, null));
+
+    while (nodesQueue.Count > 1)
+    {
+        Node leftNode = nodesQueue.Dequeue();
+        Node rightNode = nodesQueue.Dequeue();
+        Node parentNode = new Node(0, leftNode.Start, rightNode.End, null, null, rightNode, leftNode);
+        leftNode.Parent=parentNode;
+        rightNode.Parent=parentNode;
+        nodesQueue.Enqueue(parentNode);
+    }
+
+    Node root = nodesQueue.Dequeue();
+
+    return root;
+}
