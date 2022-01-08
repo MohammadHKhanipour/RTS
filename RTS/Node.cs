@@ -35,6 +35,10 @@
         public void AddCounter()
         {
             Counter++;
+            CheckRoot();
+        }
+        public void CheckRoot()
+        {
             Sigma heapRoot;
             try
             {
@@ -48,12 +52,12 @@
             if (heapRoot.Value <= Counter)
             {
                 MinHeap.Pop();
+                CheckRoot();
                 int landa = heapRoot.Query.RecieveSignal();
                 if (landa >= 0)
-                    MinHeap.Add(new Sigma(heapRoot.Query, landa+Counter));
+                    MinHeap.Add(new Sigma(heapRoot.Query, landa + Counter));
             }
         }
-
         public void UpdateHeap (int landa, Query query)
         {
             MinHeap.Add(new Sigma(query,landa + Counter));

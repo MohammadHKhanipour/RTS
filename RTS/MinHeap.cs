@@ -7,7 +7,7 @@
 
         public MinHeap(int size)
         {
-            _elements = new Sigma[size];
+            _elements = new Sigma[size+10];
         }
 
         private int GetLeftChildIndex(int elementIndex) => 2 * elementIndex + 1;

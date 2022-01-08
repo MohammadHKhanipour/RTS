@@ -22,9 +22,6 @@
             if (IsDone)
                 return -1;
             SignalCount++;
-            if (SignalCount < Nodes.Count)
-                return Landa;
-            SignalCount = 0;
             int counter = 0;
 
             foreach (Node node in Nodes)
@@ -35,6 +32,11 @@
                 IsDone = true;
                 Console.WriteLine($"Query with Start: {Start} End: {End} and Threshold: {Threshold} is done");
             }
+
+            if (SignalCount < Nodes.Count)
+                return Landa;
+
+            SignalCount = 0;
 
             Landa = (Threshold - counter) / (2 * Nodes.Count);
             foreach (var node in Nodes)
