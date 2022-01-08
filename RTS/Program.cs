@@ -8,15 +8,15 @@ List<Query> queries = new List<Query>();
 for (int i = 1; i <= queryCount; i++)
 {
     Console.WriteLine($"Enter query number {i}'s start");
-    int start = Convert.ToInt32(Console.ReadLine());
+    double start = Convert.ToDouble(Console.ReadLine());
     Console.WriteLine($"Enter query number {i}'s end");
-    int end = Convert.ToInt32(Console.ReadLine());
+    double end = Convert.ToDouble(Console.ReadLine());
     Console.WriteLine($"Enter query number {i}'s threshold");
     int threshold = Convert.ToInt32(Console.ReadLine());
     queries.Add(new Query(start, end, threshold));
 }
 
-List<float> values = new List<float>();
+List<double> values = new List<double>();
 foreach (var item in queries)
 {
     values.Add(item.Start);
@@ -45,7 +45,18 @@ var treeRoot = GenerateTree(values.Distinct().OrderBy(x => x).ToList());
 
                                                   ...
  */
-Node GenerateTree(List<float> input)
+
+AddSigmas(treeRoot, queries);
+MakeNodeHeap(treeRoot);
+
+Console.WriteLine("Enter values: ");
+while (true)
+{
+    double value = Convert.ToDouble(Console.ReadLine());
+    AddCounter(treeRoot, value);
+}
+
+Node GenerateTree(List<double> input)
 {
     int inputCount = input.Count;
     List<Node> nodes = new List<Node>();
@@ -83,9 +94,11 @@ List<Node> FindNodes(Query query, Node root)
     while (stack.Count > 0)
     {
         Node node = stack.Pop();
-        if (node.Start >= query.Start && node.End <= query.End)
+        if (node == null)
+            continue;
+        if (node.Start >= query.Start && node.End <= query.End && node.End != -1)
             nodes.Add(node);
-        else if (node.Start > query.End || node.End < query.Start)
+        else if (node.Start > query.End || (node.End < query.Start && node.End != -1))
             continue;
         stack.Push(node.RightChild);
         stack.Push(node.LeftChild);
@@ -99,10 +112,30 @@ void AddSigmas(Node root, List<Query> queries)
     foreach (var query in queries)
     {
         List<Node> nodes = FindNodes(query, root);
+        query.Nodes = nodes;
         int landa = query.Threshold / (2 * nodes.Count);
+        query.Landa = landa;
         foreach (var node in nodes)
-        {
             node.AddSigma(query, landa);
-        }
     }
+}
+
+void MakeNodeHeap(Node root)
+{
+    if (root == null)
+        return;
+    root.MakeHeap();
+    MakeNodeHeap(root.LeftChild);
+    MakeNodeHeap(root.RightChild);
+}
+
+void AddCounter(Node node, double value)
+{
+    if (node == null)
+        return;
+    if (node.Start > value || (node.End <= value && node.End != -1))
+        return;
+    node.AddCounter();
+    AddCounter(node.LeftChild, value);
+    AddCounter(node.RightChild, value);
 }

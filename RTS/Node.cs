@@ -2,7 +2,7 @@
 {
     public class Node
     {
-        public Node(int counter, float start, float end, List<Query>? queries, Node? parent, Node? rightChild, Node? leftChild)
+        public Node(int counter, double start, double end, List<Query>? queries, Node? parent, Node? rightChild, Node? leftChild)
         {
             Counter = counter;
             Start = start;
@@ -12,8 +12,8 @@
             LeftChild = leftChild;
         }
         public int Counter { get; set; }
-        public float Start { get; set; }
-        public float End { get; set; }
+        public double Start { get; set; }
+        public double End { get; set; }
         public List<Sigma>? Sigmas { get; set; } = new List<Sigma>();
         public MinHeap MinHeap { get; set; }
         public Node? Parent { get; set; }
@@ -27,9 +27,36 @@
 
         public void MakeHeap()
         {
-            MinHeap = new MinHeap(Sigmas.Count);
+            MinHeap = new MinHeap(Sigmas.Count*2);
             foreach (var sigma in Sigmas)
                 MinHeap.Add(sigma);
+        }
+
+        public void AddCounter()
+        {
+            Counter++;
+            Sigma heapRoot;
+            try
+            {
+                heapRoot = MinHeap.Peek();
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            if (heapRoot.Value <= Counter)
+            {
+                MinHeap.Pop();
+                int landa = heapRoot.Query.RecieveSignal();
+                if (landa >= 0)
+                    MinHeap.Add(new Sigma(heapRoot.Query, landa+Counter));
+            }
+        }
+
+        public void UpdateHeap (int landa, Query query)
+        {
+            MinHeap.Add(new Sigma(query,landa + Counter));
         }
     }
 }
