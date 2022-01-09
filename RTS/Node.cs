@@ -27,7 +27,7 @@
 
         public void MakeHeap()
         {
-            MinHeap = new MinHeap(Sigmas.Count*2);
+            MinHeap = new MinHeap(Sigmas.Count * 2);
             foreach (var sigma in Sigmas)
                 MinHeap.Add(sigma);
         }
@@ -58,9 +58,9 @@
                     MinHeap.Add(new Sigma(heapRoot.Query, landa + Counter));
             }
         }
-        public void UpdateHeap (int landa, Query query)
+        public void UpdateHeap(int landa, Query query)
         {
-            MinHeap.Add(new Sigma(query,landa + Counter));
+            MinHeap.Add(new Sigma(query, landa + Counter));
         }
     }
 }

@@ -7,7 +7,6 @@
             Query = query;
             Value = value;
         }
-
         public Query Query { get; set; }
         public int Value { get; set; }
     }
