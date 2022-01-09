@@ -43,7 +43,7 @@ var treeRoot = GenerateTree(values.Distinct().OrderBy(x => x).ToList());
                 │  /parent   │      │   /parent   │      │  /parent   │       │   /parent   │
                 └────────────┘      └─────────────┘      └────────────┘       └─────────────┘
 
-                                                  ...
+                                                    ...
  */
 
 AddSigmas(treeRoot, queries);
